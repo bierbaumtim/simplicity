@@ -16,7 +16,7 @@ import 'package:get_it/get_it.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
 
-final getIt = GetIt();
+final getIt = GetIt.instance;
 
 void main() {
   getIt.registerSingleton(SettingsState());
