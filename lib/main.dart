@@ -53,18 +53,20 @@ class _SimplicityAppState extends State<SimplicityApp> {
     if (Platform.isIOS) {
       return observe(
         () => CupertinoApp(
-              home: HomePage(),
-              theme: settingsState.darkmode.get()
-                  ? CupertinoThemeData(brightness: Brightness.dark)
-                  : CupertinoThemeData(brightness: Brightness.light),
-            ),
+          home: HomePage(),
+          theme: settingsState.darkmode.get()
+              ? CupertinoThemeData(brightness: Brightness.dark)
+              : CupertinoThemeData(brightness: Brightness.light),
+        ),
       );
     }
     return observe(
       () => MaterialApp(
-            home: HomePage(),
-            theme: settingsState.darkmode.get() ? ThemeData.dark() : ThemeData.light(),
-          ),
+        debugShowCheckedModeBanner: false,
+        home: HomePage(),
+        theme:
+            settingsState.darkmode.get() ? ThemeData.dark() : ThemeData.light(),
+      ),
     );
   }
 
@@ -76,8 +78,9 @@ class _SimplicityAppState extends State<SimplicityApp> {
     }
     final tasksJson = await file.readAsString();
     debugPrint(tasksJson);
-    final List<Task> tasks =
-        tasksJson.isNotEmpty ? jsonDecode(tasksJson).map<Task>((t) => Task.fromJson(t)).toList() : <Task>[];
+    final List<Task> tasks = tasksJson.isNotEmpty
+        ? jsonDecode(tasksJson).map<Task>((t) => Task.fromJson(t)).toList()
+        : <Task>[];
     tasksState.tasks.set(tasks);
 
     _tasksStreamSubscription = tasksState.tasks.$stream.listen((tasks) async {
@@ -94,7 +97,8 @@ class _SimplicityAppState extends State<SimplicityApp> {
     final prefs = await SharedPreferences.getInstance();
     final darkmode = prefs.getBool('darkmode') ?? true;
     settingsState.darkmode.set(darkmode);
-    _settingsStreamSubscription = settingsState.darkmode.$stream.listen((darkmode) async {
+    _settingsStreamSubscription =
+        settingsState.darkmode.$stream.listen((darkmode) async {
       final prefs = await SharedPreferences.getInstance();
       prefs.setBool('darkmode', darkmode);
     });
